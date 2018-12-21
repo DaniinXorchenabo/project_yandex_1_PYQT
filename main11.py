@@ -1,5 +1,8 @@
 import sys  # sys нужен для передачи argv в QApplication
-from PyQt5 import QtWidgets
+try:
+    from PyQt5 import QtWidgets
+except Exception:
+    print('установите PyQt5')
 import design5  # Это наш конвертированный файл дизайна
 import design_save
 import design_enter
@@ -8,9 +11,14 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QLabel, QWidget
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPainter, QColor, QBrush
-import os
-import shutil
-from PIL import Image
+try:
+    import shutil
+except Exception:
+    print('установите shutil')
+try:
+    from PIL import Image
+except Exception:
+    print('установите PIL')
 from random import shuffle
 
 class window_enter_class(QtWidgets.QMainWindow, design_enter.Ui_MainWindow):
@@ -57,66 +65,82 @@ def main_save(save_class):
 def main_enter(save_class):
     save_class.show()   
     
-class ExampleApp(QtWidgets.QMainWindow, design5.Ui_MainWindow):
+class grand_class(QtWidgets.QMainWindow, design5.Ui_MainWindow):
     
     def __init__(self, save_clas, enter_class):
         
         super().__init__()
-        self.seve_or_not_otvet_window = '--'
+        self.seve_or_not_otvet_window = '--' # сохранение фото после изменения
         self.massiv_image_formats = ['.png', '.jpg', '.gif', '.bmp', '.JPG']
-        self.setupUi(self)  # Это нужно для инициализации нашего дизайна
+        self.setupUi(self)  # Это нужно для инициализации дизайна
         self.setWindowTitle('РедСмот_N.0')
-        self.save_clas = save_clas
-        self.enter_class = enter_class
+        self.save_clas = save_clas # класс окна сохранения
+        self.enter_class = enter_class # класс окна предупреждения
+        """выбор директории для просмотра фоток"""
         self.choice_dir_button_wath.clicked.connect( self.browse_folder)
-        self.pokas.setEnabled(False)
-        self.question_seve_or_not = False
-        self.otvet_got = True
-        self.izmenit = True
-        self.izmenit1 = True
-        self.pokas.clicked.connect(self.load_image)
-        self.list_file_in_dir.currentTextChanged['QString'].connect(self.print_image_from_list)
-        self.listt, self.chetchik = [], 0
-        self.past_chetchik = 0
-        self.draw_image("fire.png") 
-        self.dirway_file = ""  
-        
+        self.pokas.setEnabled(False)# делаем кнопку не кликабельной
+        self.question_seve_or_not = False 
+        self.otvet_got = True 
+        self.izmenit = True # для одновременного изменения x и y  у картинки
+        self.izmenit1 = True # для изменения формата файла
+        """при нажатии отобразить ихображение"""
+        self.pokas.clicked.connect(self.load_image)  
+        """при выборе одной картинки из списка отобразить ее"""
+        self.list_file_in_dir.currentTextChanged['QString'].connect(
+            self.print_image_from_list)
+        self.listt = []  # список картинок
+        self.chetchik = 0 # какую картинку выбрал пользователь
+        self.past_chetchik = 0 # предыдущее значение счетчика
+        self.draw_image("fire.png") # залитие фона
+        self.dirway_file = "" # папка файла
+        """галочка для сохранения пропорций"""
         self.save_proportions_1.clicked[bool].connect(self.proportion)
         self.save_proportions1 = False  
-        
+        """бегунки с размерами изображений"""
         self.size_x_2.valueChanged[int].connect(self.size_x2_image_function)
         self.size_y_2.valueChanged[int].connect(self.size_y2_image_function)
         self.size_x_1.valueChanged[int].connect(self.size_x1_image_function)
         self.size_y_1.valueChanged[int].connect(self.size_y1_image_function)
-        self.save_parametr_kachestvo.valueChanged[int].connect(self.save_parametr_kachestvo_function)
-        self.size_x2_image_int = 300
+        self.save_parametr_kachestvo.valueChanged[int].connect(
+            self.save_parametr_kachestvo_function) # качество сохр. картинки
+        self.size_x2_image_int = 300 # Начальные значения бегунков
         self.size_y2_image_int = 300
         self.size_x1_image_int = 300
         self.size_y1_image_int = 300
-        self.save_parametr_kachestvo_int = 85
+        self.save_parametr_kachestvo_int = 85 # начальное качество
         
-        self.format_file_wath_program.textChanged['QString'].connect(self.get_format_save_function)
+        self.format_file_wath_program.textChanged['QString'].connect(# формат
+            self.get_format_save_function)# открыт. картинки, введённый польз.
         self.save_format_str = '.jpg'
-        self.format_file_for_lot_cutting.textChanged['QString'].connect(self.copy_format_function)
+        """формат и имя файла для копирования"""
+        self.format_file_for_lot_cutting.textChanged['QString'].connect(
+            self.copy_format_function)
         self.copy_format_string = ".jpg"
-        self.filename_a_lot_copy.textChanged['QString'].connect(self.copy_filename_function)
+        self.filename_a_lot_copy.textChanged['QString'].connect(
+            self.copy_filename_function)
         self.copy_filename_str = "cat"
-        
-        self.save_proportions_2.toggled[bool].connect(self.cutting_in_good_function)
+        """значения галочек которые нужны для копирования файлов"""
+        self.save_proportions_2.toggled[bool].connect(
+            self.cutting_in_good_function)
         self.save_proportions2 = False
-        self.cutting__in_good.toggled[bool].connect(self.cutting_in_good_function)
+        self.cutting__in_good.toggled[bool].connect(
+            self.cutting_in_good_function)
         self.cutting_in_good_for_if = False
-        self.get_ramka_for_save.toggled[bool].connect(self.cutting_in_good_function)
+        self.get_ramka_for_save.toggled[bool].connect(
+            self.cutting_in_good_function)
         self.get_ramka_for_save_bool = False
-        
-        self.choice_dir_button_from_copy.clicked.connect( self.choice_dir_for_lot_copy_from)
+        """ начальная и конечная директории для копирования """
+        self.choice_dir_button_from_copy.clicked.connect(
+            self.choice_dir_for_lot_copy_from)
         self.directory_from = ''
-        self.choice_dir_button_to_copy.clicked.connect( self.choice_dir_for_lot_copy)
+        self.choice_dir_button_to_copy.clicked.connect(
+            self.choice_dir_for_lot_copy)
         self.directory_for = ''
-        self.statr_copt_button.clicked.connect( self.start_copy)
+        self.statr_copt_button.clicked.connect( # начать копирование
+            self.start_copy)
         self.comand_copy_for = False
         self.comand_copy_from = False
-        
+        """ вывод процесса копирования и созранения файлов """
         self.out_print_list_copy_file_text = ''
         
     def save_or_not_input_from_save_class(self, otvet):
@@ -140,7 +164,8 @@ class ExampleApp(QtWidgets.QMainWindow, design5.Ui_MainWindow):
         if self.izmenit:
             print('>>><<<<')
             if  self.save_proportions1:
-                self.size_y2_image_int = (self.size_x2_image_int * self.pixmap1.height())/self.pixmap1.width()
+                size = self.size_x2_image_int * self.pixmap1.height()
+                self.size_y2_image_int = size / self.pixmap1.width()
                 self.size_y2_image_int = int(self.size_y2_image_int + 0.5)        
                 self.izmenenie_sixe(False, int(self.size_y2_image_int))
             self.save_or_not_function()
@@ -150,7 +175,8 @@ class ExampleApp(QtWidgets.QMainWindow, design5.Ui_MainWindow):
         if self.izmenit:
             print('0=0=0=')
             if  self.save_proportions1:
-                self.size_x2_image_int = (self.size_y2_image_int * self.pixmap1.width())/self.pixmap1.height()
+                size = self.size_y2_image_int * self.pixmap1.width()
+                self.size_x2_image_int = size / self.pixmap1.height()
                 self.size_x2_image_int = int(self.size_x2_image_int + 0.5)
                 self.izmenenie_sixe(True, int(self.size_x2_image_int))
             self.save_or_not_function()
@@ -206,14 +232,14 @@ class ExampleApp(QtWidgets.QMainWindow, design5.Ui_MainWindow):
                 self.draw_image(self.listt[self.chetchik])        
             
     def draw_image(self, image):
-        if self.question_seve_or_not:           
+        if self.question_seve_or_not: # показываем окно сохранения если нужно        
             self.otvet_got = False
             main_save(self.save_clas)
             logika = self.listt[self.past_chetchik][-4::] == '.png' 
             if logika and self.save_format_str != '.png':
-                main_enter(self.enter_class)             
+                main_enter(self.enter_class) # показать предупреждение             
             print('.........', self.otvet_got)
-        if self.otvet_got:
+        if self.otvet_got: # если ответ получен
             print('pppppp')
             if self.seve_or_not_otvet_window == 'save':
                 save_image_function(self.listt[self.past_chetchik],
@@ -225,10 +251,12 @@ class ExampleApp(QtWidgets.QMainWindow, design5.Ui_MainWindow):
                 self.seve_or_not_otvet_window = '--'
                 self.question_seve_or_not = False
                 self.list_file_in_dir.clear()
-                for file_name in os.listdir(self.directory):  # для каждого файла в директории
-                    self.listt.append(self.dirway_file + '/' + file_name)   # добавить файл в list_file_in_dir
+                for file_name in os.listdir(self.directory):
+                    ''' для каждого файла в директории'''
+                    self.listt.append(self.dirway_file + '/' + file_name)
+                    ''' добавить файл в отображаемый списк'''
                     self.list_file_in_dir.addItem(file_name)
-                self.listt = list(filter(
+                self.listt = list(filter( #отбор файлов с нужным разрешением
                     lambda i: i[-4::] in self.massiv_image_formats, self.listt))                
             self.new_image_function(image)
             
@@ -256,13 +284,12 @@ class ExampleApp(QtWidgets.QMainWindow, design5.Ui_MainWindow):
   
         self.pixmap1 = self.pixmap1.scaled(500, 500, Qt.KeepAspectRatio)
         print('======', self.pixmap1.width(), self.pixmap1.height())
-        #self.pixmap1 = self.pixmap1.scaled(500, 500, Qt.KeepAspectRatioByExpanding)
         self.label_2.setPixmap(self.pixmap1)
         self.izmenit = True
         
     def browse_folder(self):
         
-        self.list_file_in_dir.clear()  # На случай, если в списке уже есть элементы
+        self.list_file_in_dir.clear() # при смене директории очищаем списк
         self.listt.clear()
         directory = QtWidgets.QFileDialog.getExistingDirectory(self,
                                                                "Выберите папку")
@@ -308,7 +335,7 @@ class ExampleApp(QtWidgets.QMainWindow, design5.Ui_MainWindow):
             self.directory_for = directory
             
     def out_print_list_copy_file_function(self, text):
-        self.out_print_list_copy_file_text += text + '\n'
+        self.out_print_list_copy_file_text = text
         self.out_print_list_copy_file.addItem(
             str(self.out_print_list_copy_file_text))
             
@@ -318,7 +345,7 @@ class ExampleApp(QtWidgets.QMainWindow, design5.Ui_MainWindow):
             self.draw_image(self.listt[self.chetchik])
         print(self.listt)
         
-    def keyPressEvent(self, event):
+    def keyPressEvent(self, event): # возможность листать фотографии клавой
         
         if event.key() == Qt.Key_Right: 
             print(self.chetchik, self.listt[self.chetchik])
@@ -330,28 +357,26 @@ class ExampleApp(QtWidgets.QMainWindow, design5.Ui_MainWindow):
             self.chetchik = (self.chetchik-1)%(len(self.listt))
             self.draw_image(self.listt[self.chetchik])   
     
-    def start_copy(self):
+    def start_copy(self): # копирование из одной папуи в другую
         print([self.comand_copy_for, self.comand_copy_from])
         
         if self.comand_copy_for and self.comand_copy_from:
             print(self.cutting_in_good_for_if,self.get_ramka_for_save_bool,
                   self.save_parametr_kachestvo_int)
-            start_copy_function(self.directory_from,
-                                self.directory_for,
-                                self.copy_filename_str,
-                                self.copy_format_string,
-                                
-                                self.size_x1_image_int,
-                                self.size_y1_image_int,
-                                self.save_proportions2,
-                                self.cutting_in_good_for_if,
-                                self.get_ramka_for_save_bool,
-                                self.save_parametr_kachestvo_int,
-                                self)
+            start_copy_function(self.directory_from, #начальная директория
+                                self.directory_for, #конечная директория
+                                self.copy_filename_str, #выходное имя файла
+                                self.copy_format_string, #формат выходного файла
+                                self.size_x1_image_int, # какого размера фото
+                                self.size_y1_image_int, #
+                                self.save_proportions2, # галочка на пропорциях
+                                self.cutting_in_good_for_if, #обрезка
+                                self.get_ramka_for_save_bool, #добавить рамку
+                                self.save_parametr_kachestvo_int, # качество
+                                self) # передаём класс для вывода информации
             
 def save_image_function(inp, out_filename, formafile, w_need, h_need,
-                        save_proportional, kachestvo, classname):
-    ch = 0    
+                        save_proportional, kachestvo, classname):  
     try:
         img = Image.open(inp)
         w, h = img.size
@@ -386,8 +411,7 @@ def save_image_function(inp, out_filename, formafile, w_need, h_need,
                 'не удалось исправить ошибку ' + e + ' ' + inp + "\n")                
             classname.out_print_list_copy_file_function('Идем дальше\n')
         except Exception:
-            print('эх....')
-    ch+=1
+            pass
 
 def start_copy_function(inp_dir, out_dir, out_filename, formafile, 
                         w_need, h_need, save_proportional, cut_bool, 
@@ -395,9 +419,7 @@ def start_copy_function(inp_dir, out_dir, out_filename, formafile,
     papka = inp_dir
     end_papka = out_dir
     ch = 0    
-    ch2=-1
-    word  = '' 
-    print('---')
+    word  = '' # сообщение об ошибке в файле
     print([papka])
     files111 = list(os.walk(papka))[0]
     print('-----', *files111, sep='\n')
@@ -407,9 +429,10 @@ def start_copy_function(inp_dir, out_dir, out_filename, formafile,
         print(i)
         a = '/'.join(files111[0].split('\\'))
         inp = a+'/'+ i
-        if inp[-4::] not in ['.png', '.jpg', '.gif', '.bmp']:
-            continue
-        out = end_papka+'/'+ out_filename + str(ch) + formafile#inp[-4::]
+        if inp[-4::] not in self.massiv_image_formats: # если разрешения нет
+            continue # в списке, то пропускаем этот файл
+        out = end_papka+'/'+ out_filename + str(ch) + formafile 
+        '''имя  нового файла'''
         try:
             img = Image.open(inp)
             w, h = img.size
@@ -466,12 +489,15 @@ def start_copy_function(inp_dir, out_dir, out_filename, formafile,
                 img.save(out, optimize=True, quality=kachestvo)                
             
         except Exception as e:
-            print('Непредвиденная ошибка %s '% e, [inp] ,[out])
-            print('Идём дальше')
-            word += inp+'\n'+str(e)+ '\n'
-            classname.out_print_list_copy_file_function(
-                'не удалось исправить ошибку ' + e + ' ' + inp + "\n")                
-            classname.out_print_list_copy_file_function('Идем дальше\n')
+            try:
+                print('Непредвиденная ошибка %s '% e, [inp] ,[out])
+                print('Идём дальше')
+                word += inp+'\n'+str(e)+ '\n'
+                classname.out_print_list_copy_file_function(
+                    'не удалось исправить ошибку ' + e + ' ' + inp + "\n")                
+                classname.out_print_list_copy_file_function('Идем дальше\n')
+            except Exception:
+                pass
         ch+=1
     
     f = open("exept.txt", 'w')
@@ -506,22 +532,6 @@ def obrezka_do_razmer(image,inp,out,w,h):
         h1,h2 = 0,h_old
     im = im.crop((w1, h1, w2, h2))
     return im
-    
-def plus_rasmer(image,inp,out,w,h):
-    global word
-    im = image
-    w_old,h_old = im.size
-    if(w_old == w) and (h_old == h):
-        return im
-    if (w_old > w) or (h_old > h):
-        print('===============================')
-        im = scale_image(im, inp, out, False, width=w_need, height=h_need)
-        im = obrezka_do_razmer(im,inp,out,w,h)
-    w_old,h_old = im.size
-    if True:# если указано в функции
-        if w_old > h_old:
-            im = obrezka_do_razmer(im,inp,out,w,h_old)
-    return im
 
 def cutting_in_good_working(im,w,h):# для "обрезка для сохранения пропорций"
     w_old,h_old = im.size
@@ -549,21 +559,6 @@ def cutting_in_good_working(im,w,h):# для "обрезка для сохран
         h1,h2 = 0,h_old
     im = im.crop((w1, h1, w2, h2))
     return im
-            
-def cuting(img,input_image_path,output_image_path,w0,h0,w,h):#читвертование фото
-    
-    w_o, h_o = img.size
-    if w < 0:
-        w = w_o//abs(w) 
-    if h< 0:
-        h = h_o//abs(h)
-    if w0 < 0:
-        w0 = w_o//abs(w0)
-    if h0< 0:
-        h0 = h_o//abs(h0)
-    area = (w0,h0,w,h)
-    cropped_img = img.crop(area)
-    return cropped_img
 
 def scale_image(img,
                 input_image_path, # Функция для сжатия
@@ -632,7 +627,7 @@ def main():
     app = QtWidgets.QApplication(sys.argv)  # Новый экземпляр QApplication
     window_save = window_save_class()
     ok_class = window_enter_class()
-    window = ExampleApp(window_save, ok_class) # Создаём объект класса ExampleApp
+    window = grand_class(window_save, ok_class) # Создаём объект класса grand_class
     window_save.input_class(window)
     window.show()  # Показываем окно
     app.exec_()  # и запускаем приложение 
