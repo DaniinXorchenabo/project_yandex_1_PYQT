@@ -21,7 +21,8 @@ except Exception:
     print('установите PIL')
 from random import shuffle
 
-class window_enter_class(QtWidgets.QMainWindow, design_enter.Ui_MainWindow):
+
+class WindowEnterClass(QtWidgets.QMainWindow, design_enter.Ui_MainWindow):
     
     def __init__(self,):
         
@@ -37,7 +38,7 @@ class window_enter_class(QtWidgets.QMainWindow, design_enter.Ui_MainWindow):
             self.close_function()
             
             
-class window_save_class(QtWidgets.QMainWindow, design_save.Ui_MainWindow):
+class WindowSaveClass(QtWidgets.QMainWindow, design_save.Ui_MainWindow):
     
     def __init__(self,):
         
@@ -46,7 +47,7 @@ class window_save_class(QtWidgets.QMainWindow, design_save.Ui_MainWindow):
         self.image_save_button.clicked.connect(self.save_function)
         self.no.clicked.connect(self.nosave_function)
   
-    def input_class(self,class_input):
+    def input_class(self, class_input):
         self.class_input = class_input
         self.close()
                 
@@ -62,10 +63,12 @@ class window_save_class(QtWidgets.QMainWindow, design_save.Ui_MainWindow):
 def main_save(save_class):
     save_class.show()    
 
+
 def main_enter(save_class):
     save_class.show()   
-    
-class grand_class(QtWidgets.QMainWindow, design5.Ui_MainWindow):
+
+
+class GrandClass(QtWidgets.QMainWindow, design5.Ui_MainWindow):
     
     def __init__(self, save_clas, enter_class):
         
@@ -74,25 +77,25 @@ class grand_class(QtWidgets.QMainWindow, design5.Ui_MainWindow):
         self.massiv_image_formats = ['.png', '.jpg', '.gif', '.bmp', '.JPG']
         self.setupUi(self)  # Это нужно для инициализации дизайна
         self.setWindowTitle('РедСмот_N.0')
-        self.save_clas = save_clas # класс окна сохранения
-        self.enter_class = enter_class # класс окна предупреждения
+        self.save_clas = save_clas  # класс окна сохранения
+        self.enter_class = enter_class  # класс окна предупреждения
         """выбор директории для просмотра фоток"""
         self.choice_dir_button_wath.clicked.connect( self.browse_folder)
-        self.pokas.setEnabled(False)# делаем кнопку не кликабельной
+        self.pokas.setEnabled(False)  # делаем кнопку не кликабельной
         self.question_seve_or_not = False 
         self.otvet_got = True 
-        self.izmenit = True # для одновременного изменения x и y  у картинки
-        self.izmenit1 = True # для изменения формата файла
+        self.izmenit = True  # для одновременного изменения x и y  у картинки
+        self.izmenit1 = True  # для изменения формата файла
         """при нажатии отобразить ихображение"""
         self.pokas.clicked.connect(self.load_image)  
         """при выборе одной картинки из списка отобразить ее"""
         self.list_file_in_dir.currentTextChanged['QString'].connect(
             self.print_image_from_list)
         self.listt = []  # список картинок
-        self.chetchik = 0 # какую картинку выбрал пользователь
-        self.past_chetchik = 0 # предыдущее значение счетчика
-        self.draw_image("fire.png") # залитие фона
-        self.dirway_file = "" # папка файла
+        self.chetchik = 0  # какую картинку выбрал пользователь
+        self.past_chetchik = 0  # предыдущее значение счетчика
+        self.draw_image("fire.png")  # залитие фона
+        self.dirway_file = ""  # папка файла
         """галочка для сохранения пропорций"""
         self.save_proportions_1.clicked[bool].connect(self.proportion)
         self.save_proportions1 = False  
@@ -102,15 +105,15 @@ class grand_class(QtWidgets.QMainWindow, design5.Ui_MainWindow):
         self.size_x_1.valueChanged[int].connect(self.size_x1_image_function)
         self.size_y_1.valueChanged[int].connect(self.size_y1_image_function)
         self.save_parametr_kachestvo.valueChanged[int].connect(
-            self.save_parametr_kachestvo_function) # качество сохр. картинки
-        self.size_x2_image_int = 300 # Начальные значения бегунков
+            self.save_parametr_kachestvo_function)  # качество сохр. картинки
+        self.size_x2_image_int = 300  # Начальные значения бегунков
         self.size_y2_image_int = 300
         self.size_x1_image_int = 300
         self.size_y1_image_int = 300
-        self.save_parametr_kachestvo_int = 85 # начальное качество
+        self.save_parametr_kachestvo_int = 85  # начальное качество
         
-        self.format_file_wath_program.textChanged['QString'].connect(# формат
-            self.get_format_save_function)# открыт. картинки, введённый польз.
+        self.format_file_wath_program.textChanged['QString'].connect( # формат
+            self.get_format_save_function) # открыт. картинки, введённый польз.
         self.save_format_str = '.jpg'
         """формат и имя файла для копирования"""
         self.format_file_for_lot_cutting.textChanged['QString'].connect(
@@ -163,7 +166,7 @@ class grand_class(QtWidgets.QMainWindow, design5.Ui_MainWindow):
         print(self.size_x2_image_int)
         if self.izmenit:
             print('>>><<<<')
-            if  self.save_proportions1:
+            if self.save_proportions1:
                 size = self.size_x2_image_int * self.pixmap1.height()
                 self.size_y2_image_int = size / self.pixmap1.width()
                 self.size_y2_image_int = int(self.size_y2_image_int + 0.5)        
@@ -174,7 +177,7 @@ class grand_class(QtWidgets.QMainWindow, design5.Ui_MainWindow):
         self.size_y2_image_int = by_returned_integer
         if self.izmenit:
             print('0=0=0=')
-            if  self.save_proportions1:
+            if self.save_proportions1:
                 size = self.size_y2_image_int * self.pixmap1.width()
                 self.size_x2_image_int = size / self.pixmap1.height()
                 self.size_x2_image_int = int(self.size_x2_image_int + 0.5)
@@ -237,9 +240,9 @@ class grand_class(QtWidgets.QMainWindow, design5.Ui_MainWindow):
             main_save(self.save_clas)
             logika = self.listt[self.past_chetchik][-4::] == '.png' 
             if logika and self.save_format_str != '.png':
-                main_enter(self.enter_class) # показать предупреждение             
+                main_enter(self.enter_class)  # показать предупреждение
             print('.........', self.otvet_got)
-        if self.otvet_got: # если ответ получен
+        if self.otvet_got:  # если ответ получен
             print('pppppp')
             if self.seve_or_not_otvet_window == 'save':
                 save_image_function(self.listt[self.past_chetchik],
@@ -256,7 +259,7 @@ class grand_class(QtWidgets.QMainWindow, design5.Ui_MainWindow):
                     self.listt.append(self.dirway_file + '/' + file_name)
                     ''' добавить файл в отображаемый списк'''
                     self.list_file_in_dir.addItem(file_name)
-                self.listt = list(filter( #отбор файлов с нужным разрешением
+                self.listt = list(filter(  # отбор файлов с нужным разрешением
                     lambda i: i[-4::] in self.massiv_image_formats, self.listt))                
             self.new_image_function(image)
             
@@ -289,7 +292,7 @@ class grand_class(QtWidgets.QMainWindow, design5.Ui_MainWindow):
         
     def browse_folder(self):
         
-        self.list_file_in_dir.clear() # при смене директории очищаем списк
+        self.list_file_in_dir.clear()  # при смене директории очищаем списк
         self.listt.clear()
         directory = QtWidgets.QFileDialog.getExistingDirectory(self,
                                                                "Выберите папку")
@@ -312,7 +315,7 @@ class grand_class(QtWidgets.QMainWindow, design5.Ui_MainWindow):
         directory = QtWidgets.QFileDialog.getExistingDirectory(self,
                                                                "Выберите папку")
         if directory:
-            if len(directory)>33:
+            if len(directory) > 33:
                 print_directory = directory[:30:] + '...'
             else:
                 print_directory = directory
@@ -325,7 +328,7 @@ class grand_class(QtWidgets.QMainWindow, design5.Ui_MainWindow):
         directory = QtWidgets.QFileDialog.getExistingDirectory(self,
                                                                "Выберите папку")
         if directory:
-            if len(directory)>33:
+            if len(directory) > 33:
                 print_directory = directory[:30:] + '...'
             else:
                 print_directory = directory
@@ -345,7 +348,7 @@ class grand_class(QtWidgets.QMainWindow, design5.Ui_MainWindow):
             self.draw_image(self.listt[self.chetchik])
         print(self.listt)
         
-    def keyPressEvent(self, event): # возможность листать фотографии клавой
+    def keyPressEvent(self, event):  # возможность листать фотографии клавой
         
         if event.key() == Qt.Key_Right: 
             print(self.chetchik, self.listt[self.chetchik])
@@ -357,24 +360,27 @@ class grand_class(QtWidgets.QMainWindow, design5.Ui_MainWindow):
             self.chetchik = (self.chetchik-1)%(len(self.listt))
             self.draw_image(self.listt[self.chetchik])   
     
-    def start_copy(self): # копирование из одной папуи в другую
+    def start_copy(self):  # копирование из одной папуи в другую
         print([self.comand_copy_for, self.comand_copy_from])
         
         if self.comand_copy_for and self.comand_copy_from:
             print(self.cutting_in_good_for_if,self.get_ramka_for_save_bool,
                   self.save_parametr_kachestvo_int)
-            start_copy_function(self.directory_from, #начальная директория
-                                self.directory_for, #конечная директория
-                                self.copy_filename_str, #выходное имя файла
-                                self.copy_format_string, #формат выходного файла
-                                self.size_x1_image_int, # какого размера фото
-                                self.size_y1_image_int, #
-                                self.save_proportions2, # галочка на пропорциях
-                                self.cutting_in_good_for_if, #обрезка
-                                self.get_ramka_for_save_bool, #добавить рамку
-                                self.save_parametr_kachestvo_int, # качество
-                                self) # передаём класс для вывода информации
             
+            start_copy_function(self.directory_from,  # начальная директория
+                                self.directory_for,  # конечная директория
+                                self.copy_filename_str,  # выходное имя файла
+                                self.copy_format_string,  # формат выходного файла
+                                self.size_x1_image_int,  # какого размера фото
+                                self.size_y1_image_int,
+                                self.save_proportions2,  # галочка на пропорциях
+                                self.cutting_in_good_for_if,  # обрезка
+                                self.get_ramka_for_save_bool,  # добавить рамку
+                                self.save_parametr_kachestvo_int,  # качество
+                                self,
+                                self.massiv_image_formats)  # передаём класс для вывода информации
+
+
 def save_image_function(inp, out_filename, formafile, w_need, h_need,
                         save_proportional, kachestvo, classname):  
     try:
@@ -390,9 +396,9 @@ def save_image_function(inp, out_filename, formafile, w_need, h_need,
             img.save(out, optimize=True, quality=kachestvo)
             print(out)
         except Exception as e:
-            print('Непредвиденная ошибка при сохранении %s '% e, inp )
+            print('Непредвиденная ошибка при сохранении %s ' % e, inp)
             word += '-------------Попытка исправить' + inp 
-            word += '\n-------------Попытка исправить'+str(e)+ '\n'
+            word += '\n-------------Попытка исправить'+str(e) + '\n'
             classname.out_print_list_copy_file_function(
                 'Непредвиденная ошибка при сохранении ')
             classname.out_print_list_copy_file_function(
@@ -400,45 +406,49 @@ def save_image_function(inp, out_filename, formafile, w_need, h_need,
             out = out[:-4:]+inp[-4::]
             classname.out_print_list_copy_file_function(
                 'Попытка исправить на ' + out + '\n')                     
-            print('Попытка исправить на',out)
+            print('Попытка исправить на', out)
             img.save(out, optimize=True, quality=kachestvo)                
     except Exception as e:
         try:
-            print('Непредвиденная ошибка %s '% e, [inp] ,[out])
+            print('Непредвиденная ошибка %s ' % e, [inp], [out])
             print('Идём дальше')
-            word += inp+'\n'+str(e)+ '\n'
+            word += inp+'\n'+str(e) + '\n'
             classname.out_print_list_copy_file_function(
                 'не удалось исправить ошибку ' + e + ' ' + inp + "\n")                
             classname.out_print_list_copy_file_function('Идем дальше\n')
         except Exception:
             pass
 
+
 def start_copy_function(inp_dir, out_dir, out_filename, formafile, 
                         w_need, h_need, save_proportional, cut_bool, 
-                        give_ramka, kachestvo,classname):
+                        give_ramka, kachestvo, classname, 
+                        massiv_image_formats):
+    
     papka = inp_dir
     end_papka = out_dir
     ch = 0    
-    word  = '' # сообщение об ошибке в файле
+    word = ''  # сообщение об ошибке в файле
     print([papka])
     files111 = list(os.walk(papka))[0]
     print('-----', *files111, sep='\n')
     files = files111[2]
-    ch+=1
+    ch += 1
     for i in files:
         print(i)
         a = '/'.join(files111[0].split('\\'))
-        inp = a+'/'+ i
-        if inp[-4::] not in self.massiv_image_formats: # если разрешения нет
-            continue # в списке, то пропускаем этот файл
-        out = end_papka+'/'+ out_filename + str(ch) + formafile 
+        inp = a+'/' + i
+        if inp[-4::] not in massiv_image_formats:  # если разрешения нет
+            continue  # в списке, то пропускаем этот файл
+        out = end_papka + '/' + out_filename + str(ch) + formafile
         '''имя  нового файла'''
         try:
             img = Image.open(inp)
             w, h = img.size
             classname.out_print_list_copy_file_function(
                 str(inp) + '\n - ' + out)
-            if save_proportional:   
+            if save_proportional:
+                pass
                 if cut_bool:
                     img = scale_image(img, '', '', True, True,
                                       width=w_need, height=h_need)
@@ -448,36 +458,36 @@ def start_copy_function(inp_dir, out_dir, out_filename, formafile,
                         img = cutting_in_good_working(img, w_need, h_need)
                 elif give_ramka:  
                     if save_proportional:
-                        if h > w: # приведение к нужному размеру большей стороны
-                            img = scale_image(img,'','',False, False, 
+                        if h > w:  # приведение к нужному размеру большей стороны
+                            img = scale_image(img, '', '', False, False,
                                               height=h_need, width=w_need)
                         elif h < w:
-                            img = scale_image(img,'','',False, False, 
+                            img = scale_image(img, '', '', False, False,
                                               width=w_need, height=h_need)
                         else:
-                            img = scale_image(img,'','',False, False, 
+                            img = scale_image(img, '', '', False, False,
                                               width=w_need, height=h_need)    
                     img = cutting_in_good_working(img, w_need, h_need)
                     '''добавление черной рамки недостающим краям'''
                 elif save_proportional:
-                    if h > w: # приведение к нужному размеру большей стороны
-                        img = scale_image(img,'','',False, False,
+                    if h > w:  # приведение к нужному размеру большей стороны
+                        img = scale_image(img, '', '', False, False,
                                           width=w_need, height=h_need)
                     elif h < w:
-                        img = scale_image(img,'','',False, False,
+                        img = scale_image(img, '', '', False, False,
                                           width=w_need, height=h_need)
                     else:
-                        img = scale_image(img,'','',False, False,
-                                          width=w_need, height=h_need)      
+                        img = scale_image(img, '', '', False, False,
+                                          width=w_need, height=h_need)   
             else:
                 print('resize')
                 img = img.resize((w_need, h_need), Image.ANTIALIAS)
             try:
                 img.save(out, optimize=True, quality=kachestvo)
             except Exception as e:
-                print('Непредвиденная ошибка при сохранении %s '% e, inp )
+                print('Непредвиденная ошибка при сохранении %s ' % e, inp)
                 word += '-------------Попытка исправить' + inp 
-                word += '\n-------------Попытка исправить'+str(e)+ '\n'
+                word += '\n-------------Попытка исправить'+str(e) + '\n'
                 classname.out_print_list_copy_file_function(
                     'Непредвиденная ошибка при сохранении ')
                 classname.out_print_list_copy_file_function(
@@ -485,12 +495,11 @@ def start_copy_function(inp_dir, out_dir, out_filename, formafile,
                 out = out[:-4:]+inp[-4::]
                 classname.out_print_list_copy_file_function(
                     'Попытка исправить на ' + out + '\n')                     
-                print('Попытка исправить на',out)
+                print('Попытка исправить на', out)
                 img.save(out, optimize=True, quality=kachestvo)                
-            
         except Exception as e:
             try:
-                print('Непредвиденная ошибка %s '% e, [inp] ,[out])
+                print('Непредвиденная ошибка %s ' % e, [inp], [out])
                 print('Идём дальше')
                 word += inp+'\n'+str(e)+ '\n'
                 classname.out_print_list_copy_file_function(
@@ -498,8 +507,7 @@ def start_copy_function(inp_dir, out_dir, out_filename, formafile,
                 classname.out_print_list_copy_file_function('Идем дальше\n')
             except Exception:
                 pass
-        ch+=1
-    
+        ch += 1
     f = open("exept.txt", 'w')
     f.write(word)
     f.close()    
@@ -511,7 +519,7 @@ def obrezka_do_razmer(image,inp,out,w,h):
     w_old, h_old = im.size
     if w_old > w:
         plus = (w_old - w)/2
-        if plus%1!=0:
+        if plus % 1 != 0:
             w1 = int(plus)
             w2 = w_old - int(plus)-1
         else:
@@ -519,52 +527,53 @@ def obrezka_do_razmer(image,inp,out,w,h):
             w2 = w_old - int(plus)
     else:
         w1 = 0
-        w2  = w_old
+        w2 = w_old
     if h_old > h:
         plus = (h_old - h)/2
-        if plus%1!=0:
+        if plus % 1 != 0:
             h1 = int(plus)
-            h2 = h_old- int(plus)-1
+            h2 = h_old - int(plus)-1
         else:
             h1 = int(plus)
             h2 = h_old-int(plus)
     else:
-        h1,h2 = 0,h_old
+        h1, h2 = 0, h_old
     im = im.crop((w1, h1, w2, h2))
     return im
 
-def cutting_in_good_working(im,w,h):# для "обрезка для сохранения пропорций"
-    w_old,h_old = im.size
+
+def cutting_in_good_working(im, w, h):  # для "обрезка для сохранения пропорций"
+    w_old, h_old = im.size
     if w_old < w: 
         plus = (w_old - w)/2
-        if plus%1!=0:
+        if plus % 1 != 0:
             w1 = int(plus)
             w2 = w_old - int(plus)+1
         else:
             w1 = int(plus)
             w2 = w_old - int(plus)
-        print(w1,w2)
+        print(w1, w2)
     else:
-        w1,w2 = 0,w_old
+        w1, w2 = 0, w_old
     if h_old < h:
         plus = (abs(h_old - h))/2
-        if plus%1!=0:
+        if plus % 1 != 0:
             h1 = -int(plus)
             h2 = h_old + int(plus)+1
         else:
             h1 = -int(plus)
             h2 = h_old + int(plus)
-        print(h1,h2)
+        print(h1, h2)
     else:
-        h1,h2 = 0,h_old
+        h1, h2 = 0, h_old
     im = im.crop((w1, h1, w2, h2))
     return im
 
 def scale_image(img,
-                input_image_path, # Функция для сжатия
+                input_image_path,  # Функция для сжатия
                 output_image_path,
-                sgatie, # для "сохранять пропорции"
-                big_or_small_stor, # по боьшей или по меньшей сокращать
+                sgatie,  # для "сохранять пропорции"
+                big_or_small_stor,  # по боьшей или по меньшей сокращать
                 width=None,
                 height=None
                 ):  
@@ -572,7 +581,7 @@ def scale_image(img,
     w, h = original_image.size
     wid = width
     hei = height     
-    if big_or_small_stor:  #сокращение по большей стороне 
+    if big_or_small_stor:  # сокращение по большей стороне
         print(100)
         if w < h:
             height = None
@@ -584,7 +593,7 @@ def scale_image(img,
             max_size = (int(height * w / h + 1), height)
         elif width:
             max_size = (width, int(width * h / w + 1))        
-    else: #сокращение по меньшей стороне
+    else:  # сокращение по меньшей стороне
         if w > h:
             height = None
         elif w < h:
@@ -600,7 +609,7 @@ def scale_image(img,
             max_size = (wid, hei)
         print('---', max_size, '----')
         for i in range(10):
-            original_image.thumbnail(max_size, Image.ANTIALIAS)#max_size
+            original_image.thumbnail(max_size, Image.ANTIALIAS)  # max_size
             w_n1, h_n1 = original_image.size
             if w_n1 < h_n1:
                 if w_n1 < wid:
@@ -619,19 +628,21 @@ def scale_image(img,
             else:
                 break
             max_size = (w_n1, h_n1)
-    original_image.thumbnail(max_size, Image.ANTIALIAS)#max_size
+    original_image.thumbnail(max_size, Image.ANTIALIAS)
     return original_image
-   
+
+
 def main():
     
     app = QtWidgets.QApplication(sys.argv)  # Новый экземпляр QApplication
-    window_save = window_save_class()
-    ok_class = window_enter_class()
-    window = grand_class(window_save, ok_class) # Создаём объект класса grand_class
+    window_save = WindowSaveClass()
+    ok_class = WindowEnterClass()
+    window = GrandClass(window_save, ok_class)  # Создаём объект класса grand_class
     window_save.input_class(window)
     window.show()  # Показываем окно
     app.exec_()  # и запускаем приложение 
-            
+
+
 if __name__ == '__main__':  
     app = QApplication(sys.argv)
     app1 = QApplication(sys.argv)
