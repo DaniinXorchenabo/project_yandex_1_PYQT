@@ -57,7 +57,7 @@ def main_save(save_class):
 def main_enter(save_class):
     save_class.show()   
     
-class grand_class(QtWidgets.QMainWindow, design5.Ui_MainWindow):
+class ExampleApp(QtWidgets.QMainWindow, design5.Ui_MainWindow):
     
     def __init__(self, save_clas, enter_class):
         
@@ -308,7 +308,7 @@ class grand_class(QtWidgets.QMainWindow, design5.Ui_MainWindow):
             self.directory_for = directory
             
     def out_print_list_copy_file_function(self, text):
-        self.out_print_list_copy_file_text = text
+        self.out_print_list_copy_file_text += text + '\n'
         self.out_print_list_copy_file.addItem(
             str(self.out_print_list_copy_file_text))
             
@@ -466,15 +466,12 @@ def start_copy_function(inp_dir, out_dir, out_filename, formafile,
                 img.save(out, optimize=True, quality=kachestvo)                
             
         except Exception as e:
-            try:
-                print('Непредвиденная ошибка %s '% e, [inp] ,[out])
-                print('Идём дальше')
-                word += inp+'\n'+str(e)+ '\n'
-                classname.out_print_list_copy_file_function(
-                    'не удалось исправить ошибку ' + e + ' ' + inp + "\n")                
-                classname.out_print_list_copy_file_function('Идем дальше\n')
-            except Exception:
-                pass
+            print('Непредвиденная ошибка %s '% e, [inp] ,[out])
+            print('Идём дальше')
+            word += inp+'\n'+str(e)+ '\n'
+            classname.out_print_list_copy_file_function(
+                'не удалось исправить ошибку ' + e + ' ' + inp + "\n")                
+            classname.out_print_list_copy_file_function('Идем дальше\n')
         ch+=1
     
     f = open("exept.txt", 'w')
@@ -635,7 +632,7 @@ def main():
     app = QtWidgets.QApplication(sys.argv)  # Новый экземпляр QApplication
     window_save = window_save_class()
     ok_class = window_enter_class()
-    window = grand_class(window_save, ok_class) # Создаём объект класса grand_class
+    window = ExampleApp(window_save, ok_class) # Создаём объект класса ExampleApp
     window_save.input_class(window)
     window.show()  # Показываем окно
     app.exec_()  # и запускаем приложение 
