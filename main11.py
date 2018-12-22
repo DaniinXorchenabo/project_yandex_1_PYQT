@@ -12,10 +12,6 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPainter, QColor, QBrush
 try:
-    import shutil
-except Exception:
-    print('установите shutil')
-try:
     from PIL import Image
 except Exception:
     print('установите PIL')
@@ -71,7 +67,6 @@ def main_enter(save_class):
 class GrandClass(QtWidgets.QMainWindow, design5.Ui_MainWindow):
     
     def __init__(self, save_clas, enter_class):
-        
         super().__init__()
         self.seve_or_not_otvet_window = '--' # сохранение фото после изменения
         self.massiv_image_formats = ['.png', '.jpg', '.gif', '.bmp', '.JPG']
@@ -111,7 +106,7 @@ class GrandClass(QtWidgets.QMainWindow, design5.Ui_MainWindow):
         self.size_x1_image_int = 300
         self.size_y1_image_int = 300
         self.save_parametr_kachestvo_int = 85  # начальное качество
-        
+        '''получение значений, введённых пользователем в строку'''
         self.format_file_wath_program.textChanged['QString'].connect( # формат
             self.get_format_save_function) # открыт. картинки, введённый польз.
         self.save_format_str = '.jpg'
@@ -185,15 +180,18 @@ class GrandClass(QtWidgets.QMainWindow, design5.Ui_MainWindow):
             self.save_or_not_function()
         
     def izmenenie_sixe(self, x_or_y, value):
-        self.izmenit = False
+        '''блокируем функцию реагирования на изменение ползунков'''
+        self.izmenit = False 
+        '''изменяем симетрично значение размера'''
         if x_or_y:
             self.size_x_2.setValue(int(value))
         else:
             self.size_y_2.setValue(int(value))
         print('end_izmene')
-        self.izmenit = True
+        self.izmenit = True  # включаем заблокированную функцию
         
     def izmenenie_format_file_save(self, value):
+        '''аналогично функции выше только с расширением картинки'''
         self.izmenit1 = False
         self.format_file_wath_program.setText(value)
         print('end_izmene1')
@@ -279,12 +277,12 @@ class GrandClass(QtWidgets.QMainWindow, design5.Ui_MainWindow):
         self.izmenit = False
         self.size_x_3.setText(str(self.pixmap1.width()))
         self.size_y_3.setText(str(self.pixmap1.height()))  
-        
+        '''пропорционально меняем значения ползунков'''
         self.izmenenie_sixe(False, int(self.size_y2_image_int))
         self.izmenenie_sixe(True, int(self.size_x2_image_int))
         self.size_x_1.setValue(int(self.size_x1_image_int))
         self.size_y_1.setValue(int(self.size_y1_image_int))
-  
+        '''выводим изображение в квадрат 500Х500'''
         self.pixmap1 = self.pixmap1.scaled(500, 500, Qt.KeepAspectRatio)
         print('======', self.pixmap1.width(), self.pixmap1.height())
         self.label_2.setPixmap(self.pixmap1)
@@ -343,18 +341,15 @@ class GrandClass(QtWidgets.QMainWindow, design5.Ui_MainWindow):
             str(self.out_print_list_copy_file_text))
             
     def load_image(self):
-        
         if len(self.listt) != 0:
             self.draw_image(self.listt[self.chetchik])
         print(self.listt)
         
     def keyPressEvent(self, event):  # возможность листать фотографии клавой
-        
         if event.key() == Qt.Key_Right: 
             print(self.chetchik, self.listt[self.chetchik])
             self.chetchik = (self.chetchik+1)%(len(self.listt))
             self.draw_image(self.listt[self.chetchik])
-            
         if event.key() == Qt.Key_Left: 
             print(self.chetchik, self.listt[self.chetchik])
             self.chetchik = (self.chetchik-1)%(len(self.listt))
@@ -362,11 +357,10 @@ class GrandClass(QtWidgets.QMainWindow, design5.Ui_MainWindow):
     
     def start_copy(self):  # копирование из одной папуи в другую
         print([self.comand_copy_for, self.comand_copy_from])
-        
         if self.comand_copy_for and self.comand_copy_from:
             print(self.cutting_in_good_for_if,self.get_ramka_for_save_bool,
                   self.save_parametr_kachestvo_int)
-            
+            '''вызвваем функцию копирования'''
             start_copy_function(self.directory_from,  # начальная директория
                                 self.directory_for,  # конечная директория
                                 self.copy_filename_str,  # выходное имя файла
